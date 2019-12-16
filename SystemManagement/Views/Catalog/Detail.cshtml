@@ -1,0 +1,118 @@
+﻿@model SystemManagement.Models.Catalog.AssetDetailModel
+
+
+<div class="container">
+    <div class="page-header clearfix dateilHeading">
+        <h2 class="text-muted">View Wondrous Items</h2>
+    </div>
+</div>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-7">
+            <div>
+                <img class="detailImage" src="@Model.ImageUrl" />
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <br />
+            <br />
+
+            <p id="dscrp">@Model.Description</p>
+            <p id="sts">@Model.Status</p>
+            <p id="quantiiy">@Model.Quantity</p>
+            <p>
+                Cost = @Model.Cost
+            </p>
+
+            @if (Model.Status == "Available")
+            {
+
+                <p><a class="btn btn-lg btn-info" role="button" asp-controller="Catalog" asp-action="Checkout" asp-route-id="@Model.AssetId">Check Out</a></p>
+            }
+
+            @if (Model.Status == "Lost")
+            {
+
+                <p>Item Is Lost</p>
+                <p><a class="btn btn-lg btn-success" role="button" asp-controller="Catalog" asp-action="MarkFound" asp-route-id="@Model.AssetId">MarkFound</a></p>
+
+            }
+
+            @if (Model.Status == "Checked Out")
+            {
+
+                <p id="customer"> Checked Out by: @Model.CustomerName</p>
+
+                <p><a class="btn btn-lg btn-success" role="button" asp-controller="Catalog" asp-action="CheckIn" asp-route-id="@Model.AssetId">Check In</a></p>
+                <p><a class="btn btn-lg btn-info" role="button" asp-controller="Catalog" asp-action="Hold" asp-route-id="@Model.AssetId">Place Hold</a></p>
+
+            }
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h4>Checkout History</h4>
+        <table class="table table-condensed table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Date Hired</th>
+                    <th>Date Returned</th>
+                    <th>Card Id</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var checkout in @Model.CheckoutHistory)
+                {
+
+                    <tr>
+                        <td>@checkout.CheckedOut</td>
+                        <td>@checkout.CheckedIn</td>
+                        <td>@checkout.Id</td>
+
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="col-lg-6">
+        <h4>Current Holds</h4>
+        <table class="table table-condensed table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Hold Place</th>
+                    <th>Customer</th>
+
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var hold in @Model.CurrentHolds)
+                {
+
+                    <tr>
+                        <td>@hold.HoldPlaced</td>
+                        <td>@hold.CustomerName</td>
+
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
